@@ -165,3 +165,11 @@ export const attachSession = async ({ targetSession }: AttachSessionArgs) => {
   }
   return await tmux(args);
 };
+
+// tmux has-session
+export const hasSession = async (targetSession: string): Promise<boolean> => {
+  const cmd = ["tmux", "has-session", "-t", targetSession];
+  const p = Deno.run({ cmd, stderr: "null" });
+  const status = await p.status();
+  return status.success;
+};
