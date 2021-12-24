@@ -16,13 +16,12 @@ import { loadPlan } from "../plan.ts";
 export type Args = {
   sessionName?: string;
   startDirectory?: string;
-  attach?: boolean;
 };
 
-export const exec = async (
-  { sessionName = crypto.randomUUID(), startDirectory = Deno.cwd(), attach }:
-    Args,
-) => {
+export const exec = async ({
+  sessionName = crypto.randomUUID(),
+  startDirectory = Deno.cwd(),
+}: Args) => {
   if (!await hasSession(sessionName)) {
     const dir = resolve(startDirectory);
     const planPath = join(dir, ".qtmut.yaml");
@@ -93,11 +92,9 @@ export const exec = async (
   }
 
   // Attach the session.
-  if (attach) {
-    if (Deno.env.get("TMUX")) {
-      await switchClient({ targetSession: sessionName });
-    } else {
-      await attachSession({ targetSession: sessionName });
-    }
+  if (Deno.env.get("TMUX")) {
+    await switchClient({ targetSession: sessionName });
+  } else {
+    await attachSession({ targetSession: sessionName });
   }
 };
