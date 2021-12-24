@@ -1,0 +1,2 @@
+#!/usr/bin/env deno run --no-check --allow-env --allow-read --allow-run
+import './src/cli.ts';
