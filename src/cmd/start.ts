@@ -23,8 +23,7 @@ export const exec = async ({
   startDirectory = Deno.cwd(),
 }: Args) => {
   if (!await hasSession(sessionName)) {
-    const dir = resolve(startDirectory);
-    const planPath = join(dir, ".qtmut.yaml");
+    const planPath = join(startDirectory, ".qtmut.yaml");
     const plan = await loadPlan(planPath);
 
     const windows = plan?.windows ?? [];
@@ -33,7 +32,7 @@ export const exec = async ({
     // Create the session.
     await newSession({
       sessionName,
-      startDirectory: dir,
+      startDirectory,
       windowName,
       detach: true,
     });
@@ -48,7 +47,7 @@ export const exec = async ({
           // Create the window.
           await newWindow({
             targetWindow: sessionName,
-            startDirectory: dir,
+            startDirectory,
             windowName: win?.name,
           });
         }
@@ -59,8 +58,8 @@ export const exec = async ({
           if (paneIdx > 0) {
             // Split the window.
             await splitWindow({
-              startDirectory: dir,
               targetPane: sessionName,
+              startDirectory,
             });
           }
 
