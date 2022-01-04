@@ -17,7 +17,7 @@ export type Window = {
 };
 
 export type Pane = {
-  command?: string;
+  command?: string | string[];
 };
 
 export const loadPlan = async (path: string): Promise<Plan | null> => {
