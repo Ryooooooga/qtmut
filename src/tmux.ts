@@ -167,8 +167,8 @@ export const attachSession = async ({ targetSession }: AttachSessionArgs) => {
 };
 
 // tmux has-session
-export const hasSession = async (targetSession: string): Promise<boolean> => {
-  const cmd = ["tmux", "has-session", "-t", targetSession];
+export const hasSession = async (targetSession: string, exactly: boolean): Promise<boolean> => {
+  const cmd = ["tmux", "has-session", "-t", exactly ? `=${targetSession}` : targetSession];
   const p = Deno.run({ cmd, stderr: "null" });
   const status = await p.status();
   return status.success;

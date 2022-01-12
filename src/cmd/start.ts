@@ -22,7 +22,7 @@ export const exec = async ({
   sessionName = crypto.randomUUID(),
   startDirectory = Deno.cwd(),
 }: Args) => {
-  if (!await hasSession(sessionName)) {
+  if (!await hasSession(sessionName, true)) {
     const planPath = join(startDirectory, ".qtmut.yaml");
     const plan = await loadPlan(planPath);
 
