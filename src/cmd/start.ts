@@ -68,12 +68,9 @@ export const exec = async ({
           if (!command) {
             // nothing
           } else if (typeof command === "string") {
-            await sendKeys({ targetPane: sessionName }, [command, "C-m"]);
+            await sendKeys({ targetPane: sessionName }, [command]);
           } else if (typeof command === "object") {
-            await sendKeys(
-              { targetPane: sessionName },
-              command.flatMap((cmd) => [cmd, "C-m"]),
-            );
+            await sendKeys({ targetPane: sessionName }, command);
           }
         }
 

@@ -29,11 +29,11 @@ windows:
     layout: even-horizontal
     panes:
       - command:
-      - command: vim
+      - command: ["vim", "Enter"]
   - layout: tile
     panes:
-      - command: bundle exec rails s
-      - command: tail -f logs/development.log
+      - command: ["bundle exec rails s", "Enter"]
+      - command: ["tail -f logs/development.log", "Enter"]
 ```
 
 ## Installation
