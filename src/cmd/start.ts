@@ -1,16 +1,5 @@
 import { join } from "https://deno.land/std@0.119.0/path/mod.ts";
-import {
-  attachSession,
-  hasSession,
-  newSession,
-  newWindow,
-  selectLayout,
-  selectPane,
-  selectWindow,
-  sendKeys,
-  splitWindow,
-  switchClient,
-} from "../tmux.ts";
+import { hasSession, TmuxCommand } from "../tmux.ts";
 import { loadPlan } from "../plan.ts";
 
 export type Args = {
@@ -22,6 +11,8 @@ export const exec = async ({
   sessionName = crypto.randomUUID(),
   startDirectory = Deno.cwd(),
 }: Args) => {
+  const tmux = new TmuxCommand();
+
   if (!await hasSession(sessionName, true)) {
     const planPath = join(startDirectory, ".qtmut.yaml");
     const plan = await loadPlan(planPath);
@@ -30,7 +21,7 @@ export const exec = async ({
     const windowName = windows[0]?.name;
 
     // Create the session.
-    await newSession({
+    tmux.newSession({
       sessionName,
       startDirectory,
       windowName,
@@ -45,7 +36,7 @@ export const exec = async ({
 
         if (winIdx > 0) {
           // Create the window.
-          await newWindow({
+          tmux.newWindow({
             targetWindow: sessionName,
             startDirectory,
             windowName: win?.name,
@@ -57,7 +48,7 @@ export const exec = async ({
 
           if (paneIdx > 0) {
             // Split the window.
-            await splitWindow({
+            tmux.splitWindow({
               targetPane: sessionName,
               startDirectory,
             });
@@ -68,15 +59,15 @@ export const exec = async ({
           if (!command) {
             // nothing
           } else if (typeof command === "string") {
-            await sendKeys({ targetPane: sessionName }, [command]);
+            tmux.sendKeys({ targetPane: sessionName }, [command]);
           } else if (typeof command === "object") {
-            await sendKeys({ targetPane: sessionName }, command);
+            tmux.sendKeys({ targetPane: sessionName }, command);
           }
         }
 
         // Select layout.
         const layout = win?.layout;
-        await selectLayout({ targetPane: sessionName }, layout ?? "tile");
+        tmux.selectLayout({ targetPane: sessionName }, layout ?? "tile");
       }
     }
 
@@ -84,10 +75,10 @@ export const exec = async ({
     const active = plan?.active;
     if (active) {
       if (active.window) {
-        await selectWindow({ targetWindow: `${sessionName}:${active.window}` });
+        tmux.selectWindow({ targetWindow: `${sessionName}:${active.window}` });
       }
       if (active.pane) {
-        await selectPane({
+        tmux.selectPane({
           targetPane: `${sessionName}:${active.window ?? ""}.${active.pane}`,
         });
       }
@@ -96,8 +87,10 @@ export const exec = async ({
 
   // Attach the session.
   if (Deno.env.get("TMUX")) {
-    await switchClient({ targetSession: sessionName });
+    tmux.switchClient({ targetSession: sessionName });
   } else {
-    await attachSession({ targetSession: sessionName });
+    tmux.attachSession({ targetSession: sessionName });
   }
+
+  await tmux.run();
 };
