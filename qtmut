@@ -1,4 +1,4 @@
 #!/usr/bin/env deno run --no-check --allow-env --allow-read --allow-run
 import { run } from './src/cli.ts';
 
-await run(Deno.args);
+await run();
