@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-deno run --no-check --allow-env --allow-read --allow-run "$(dirname "$0")/qtmut.ts" "$@"
+deno run --no-check --allow-env --allow-read --allow-run "$(dirname "$(realpath "$0")")/qtmut.ts" "$@"
