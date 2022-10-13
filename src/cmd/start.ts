@@ -1,4 +1,4 @@
-import { join } from "https://deno.land/std@0.119.0/path/mod.ts";
+import { join } from "std/path/mod.ts";
 import { hasSession, TmuxCommand } from "../tmux.ts";
 import { loadPlan } from "../plan.ts";
 

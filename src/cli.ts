@@ -1,4 +1,4 @@
-import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
+import { Command } from "cliffy/command/mod.ts";
 import { exec as execNewSession } from "./cmd/start.ts";
 
 export const run = async () => {
