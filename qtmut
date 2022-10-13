@@ -1,2 +1,4 @@
-#!/usr/bin/env sh
-deno run --no-check --allow-env --allow-read --allow-run "$(dirname "$(realpath "$0")")/qtmut.ts" "$@"
+#!/usr/bin/env -S deno run --no-check --allow-env --allow-read --allow-run
+import { run } from './src/cli.ts';
+
+await run();
